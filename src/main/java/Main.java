@@ -1,67 +1,63 @@
-import java.awt.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
 import br.com.davesmartins.api.Graph;
-import jdk.internal.util.xml.impl.Input;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
 
-		Scanner scan = new Scanner(System.in);
+		Scanner leitura = new Scanner(System.in);
 		Grafo grafo = new Grafo(false);
 
-		
 		System.out.println("###### Menu Principal");
 		System.out.println("## 1 - Criar grafo");
 		System.out.println("## 2 - Abrir grafo");
 		System.out.println("## 3 - Sair");
 		System.out.println();
 
-		int op = scan.nextInt();
+		int op = leitura.nextInt();
 
 		switch (op) {
 
 		case 1:
 			menu_1();
-			int menu1 = scan.nextInt();
+			int menu1 = leitura.nextInt();
 			switch (menu1) {
 			case 1:
 				System.out.println("###### Escolha uma opção:\n## 1 - Orientado \n## 2 - Não Orientado");
-				int orientado = scan.nextInt();
+				int orientado = leitura.nextInt();
 				if (orientado == 1) {
 					grafo.orientaGrafo();
 				}
 
 				while (true) {
-					menu_2(scan);
-					int menu2 = scan.nextInt();
+					menu_2(leitura);
+					int menu2 = leitura.nextInt();
 
-					criar_grafo_valorado(scan, grafo, menu2);
+					criar_grafo_valorado(leitura, grafo, menu2);
 
 				}
 
 			case 2:
 				System.out.println("###### Escolha uma opção:\n## 1 - Orientado \n## 2 - Não Orientado");
-				int orientado1 = scan.nextInt();
+				int orientado1 = leitura.nextInt();
 				if (orientado1 == 1) {
 					grafo.orientaGrafo();
 
 				}
-					while (true) {
-						menu_2(scan);
-						int menu2 = scan.nextInt();
+				while (true) {
+					menu_2(leitura);
+					int menu2 = leitura.nextInt();
 
-						criar_grafo_naoValorado(scan, grafo, menu2);
+					criar_grafo_naoValorado(leitura, grafo, menu2);
 
-					}
-				
+				}
 
 			case 3:
 				break;
@@ -70,10 +66,9 @@ public class Main {
 
 		case 2:
 
-			grafo = case_2_menu_principal(scan, grafo);
+			grafo = case_2_menu_principal(leitura, grafo);
 			boolean valorado = false;
 
-			
 			for (int i = 0; i < grafo.getArestas().size(); i++) {
 				if ((grafo.getArestas().get(i)).getPeso() != 1) {
 					valorado = true;
@@ -83,10 +78,10 @@ public class Main {
 			if (valorado) {
 
 				while (true) {
-					menu_2(scan);
-					int menu2 = scan.nextInt();
+					menu_2(leitura);
+					int menu2 = leitura.nextInt();
 
-					criar_grafo_valorado(scan, grafo, menu2);
+					criar_grafo_valorado(leitura, grafo, menu2);
 
 					if (menu2 == 8) {
 						break;
@@ -95,10 +90,10 @@ public class Main {
 
 			} else {
 				while (true) {
-					menu_2(scan);
-					int menu2 = scan.nextInt();
+					menu_2(leitura);
+					int menu2 = leitura.nextInt();
 
-					criar_grafo_naoValorado(scan, grafo, menu2);
+					criar_grafo_naoValorado(leitura, grafo, menu2);
 
 					if (menu2 == 8) {
 						break;
@@ -107,16 +102,15 @@ public class Main {
 
 			}
 
-
 		case 3:
 			break;
 		}
 
 	}
 
-	private static Grafo case_2_menu_principal(Scanner scan, Grafo g) {
+	private static Grafo case_2_menu_principal(Scanner leitura, Grafo g) {
 		System.out.println("\nInforme o nome do arquivo:");
-		String ler = scan.next();
+		String ler = leitura.next();
 
 		File grafo1 = new File("DOTS/" + ler + ".dot");
 
@@ -132,10 +126,10 @@ public class Main {
 					String linha = br.readLine();
 
 					String[] textoSeparado = linha.split(" ");
-					
+
 					if (linha.contains(";") && (!linha.contains("--") || !linha.contains("->"))) {
-                        g.addVertice(textoSeparado[0].trim().replaceAll(";", ""));
-                    }
+						g.addVertice(textoSeparado[0].trim().replaceAll(";", ""));
+					}
 
 					if (linha.contains("graph")) {
 						g.setOrientacao(false);
@@ -145,9 +139,8 @@ public class Main {
 
 					if (linha.contains("--")) {
 						g.setOrientacao(false);
-						
-						
-						g.addVertice(textoSeparado[0]);	
+
+						g.addVertice(textoSeparado[0]);
 						g.addVertice(textoSeparado[2]);
 
 						if (linha.contains("label")) {
@@ -190,115 +183,114 @@ public class Main {
 		return g;
 	}
 
-	private static void criar_grafo_naoValorado(Scanner scan, Grafo grafo, int menu2) throws IOException {
+	private static void criar_grafo_naoValorado(Scanner leitura, Grafo grafo, int menu2) throws IOException {
 		if (menu2 == 1) {
-			adiciona_Vertice(scan, grafo);
+			adiciona_Vertice(leitura, grafo);
 		} else if (menu2 == 2) {
 			System.out.println("Qual vértice deseja remover: ");
-			String verticeRemov = scan.next();
+			String verticeRemov = leitura.next();
 			grafo.removeVertice(verticeRemov);
-			System.out.println("Vértice Removido");			
-			
-		}else if (menu2 == 3) {	
-			if(grafo.getOrientacao()) {
-				adiciona_aresta_naoValorada_orientada(scan, grafo);	
-			}else {
-				adiciona_aresta_naoValorada_naoOrientada(scan,grafo);
+			System.out.println("Vértice Removido");
+
+		} else if (menu2 == 3) {
+			if (grafo.getOrientacao()) {
+				adiciona_aresta_naoValorada_orientada(leitura, grafo);
+			} else {
+				adiciona_aresta_naoValorada_naoOrientada(leitura, grafo);
 			}
-			
-			
-		}else if (menu2 == 4) {
-			if(grafo.getOrientacao()) {
+
+		} else if (menu2 == 4) {
+			if (grafo.getOrientacao()) {
 				System.out.println("Digite o vértice de origem da aresta que deseja remover:");
-				String vOrig = scan.next();
+				String vOrig = leitura.next();
 				System.out.println("Digite o vértice de destino da aresta que deseja remover:");
-				String vDest = scan.next();
+				String vDest = leitura.next();
 				grafo.excluirAresta(grafo.getVertice(vOrig), grafo.getVertice(vDest));
 				System.out.println("Aresta removida!");
-			}else {
+			} else {
 				System.out.println("Digite o primeiro vértice da aresta que deseja remover:");
-				String vOrig = scan.next();
+				String vOrig = leitura.next();
 				System.out.println("Digite o segundo vértice da aresta que deseja remover:");
-				String vDest = scan.next();
+				String vDest = leitura.next();
 				grafo.excluirAresta(grafo.getVertice(vOrig), grafo.getVertice(vDest));
 				System.out.println("Aresta Removida!!");
 
 			}
-			
-			
-		}else if (menu2 == 5) {
-			System.out.println("1 - imprimir Matriz Adjacencia \n2 - Imprimir Matriz Incidencia \n3 - Imprimir Lista Adjacencia");
-			int menu3_imprimir = scan.nextInt();
-			
-				if (menu3_imprimir == 1) {
-					grafo.criaMatrizAdj();
-					imprimeMatrizAdj(grafo.getMat());
-				}else if (menu3_imprimir == 2) {
-					grafo.criaMatrizInc();
-					imprimeMatrizInc(grafo.getMat());
-				}else if(menu3_imprimir == 3) {
-					System.out.println(grafo.retornaListaAdj());
-				}
-			
+
+		} else if (menu2 == 5) {
+			System.out.println(
+					"1 - imprimir Matriz Adjacencia \n2 - Imprimir Matriz Incidencia \n3 - Imprimir Lista Adjacencia");
+			int menu3_imprimir = leitura.nextInt();
+
+			if (menu3_imprimir == 1) {
+				grafo.criaMatrizAdj();
+				imprimeMatrizAdj(grafo.getMat());
+			} else if (menu3_imprimir == 2) {
+				grafo.criaMatrizInc();
+				imprimeMatrizInc(grafo.getMat());
+			} else if (menu3_imprimir == 3) {
+				System.out.println(grafo.retornaListaAdj());
+			}
+
 		} else if (menu2 == 6) {
 			menu_3();
-			int menu3 = scan.nextInt();
+			int menu3 = leitura.nextInt();
 			while (true) {
 				if (menu3 == 1) {
 					System.out.println("A ordem do grafo é :" + grafo.getOrdemGrafo());
 					System.out.println();
 					break;
 				} else if (menu3 == 2) {
-					grau_do_vertice(scan, grafo);
+					grau_do_vertice(leitura, grafo);
 					System.out.println();
 					break;
 
 				} else if (menu3 == 3) {
-					if(grafo.grafoSimples()) {
+					if (grafo.grafoSimples()) {
 						System.out.println("O grafo é simples!");
 						System.out.println();
 						break;
-					}else {
+					} else {
 						System.out.println("O grafo não é simples!");
 						System.out.println();
 						break;
 					}
-					
+
 				} else if (menu3 == 4) {
-					if(grafo.verificaRegular()) {
-						System.out.println("O grafo é regular!");	
+					if (grafo.verificaRegular()) {
+						System.out.println("O grafo é regular!");
 						System.out.println();
 						break;
-					}else {
+					} else {
 						System.out.println("O grafo NÃO é regular!");
 						System.out.println();
 						break;
 					}
-				}else if (menu3 == 5) {
-					if(grafo.verificaGrafoCompleto()) {
-						System.out.println("O grafo é completo!");	
+				} else if (menu3 == 5) {
+					if (grafo.verificaGrafoCompleto()) {
+						System.out.println("O grafo é completo!");
 						System.out.println();
 						break;
-					}else {
+					} else {
 						System.out.println("O grafo NÃO é completo!");
 						System.out.println();
 						break;
 					}
 
-				}else if (menu3 == 6) {
-					if(grafo.existeConexao()) {
+				} else if (menu3 == 6) {
+					if (grafo.existeConexao()) {
 						System.out.println("Grafo conexo!");
 						System.out.println();
 						break;
-					}else {
+					} else {
 						System.out.println("Grafo desconexo!");
 						System.out.println();
 						break;
 					}
-				}else if (menu3 == 7) {
-					if(grafo.getOrientacao()) {
+				} else if (menu3 == 7) {
+					if (grafo.getOrientacao()) {
 						System.out.println("Qual vértice deseja analisar o FTD e FTI :");
-						String vrtc = scan.next();
+						String vrtc = leitura.next();
 						Vertice v = grafo.getVertice(vrtc);
 						System.out.printf("Fecho Transitivivo direto:");
 						imprimeLista(grafo.fechoTransitivoDireto(v));
@@ -307,294 +299,64 @@ public class Main {
 						imprimeLista(grafo.fechoTransitivoInverso(v));
 						System.out.println();
 						break;
-					}else {
+					} else {
 						System.out.println("Para FTD e FTI, o grafo deve ser orientado");
 						System.out.println();
 						break;
 					}
-					
-				}else if(menu3 == 8) {
+
+				} else if (menu3 == 8) {
 					System.out.println("Os vértices fonte são: ");
 					imprimeLista(grafo.verticesFonte());
 					System.out.println();
 					break;
-					
-				}else if (menu3 == 9) {
+
+				} else if (menu3 == 9) {
 					System.out.println("Os vértices sumidouro são: ");
 					imprimeLista(grafo.verticesSumidouro());
 					System.out.println();
 					break;
-					
-					
-				}else if (menu3 == 10) {
+
+				} else if (menu3 == 10) {
 					break;
 				}
 			}
-		} else if (menu2 ==7) {
-				System.out.println("1 - Existe Caminho \n2 - Caminho Mínimo (Dijkstra) \n3 - Árvore Geradora Mínima(Kruskal) \n4 - Grafo Reduzido (Malgrange)");
-				int menuAlg = scan.nextInt();
-				if(menuAlg == 1) {
-					System.out.println("Digite o primeiro vértice: ");
-					String v1 = scan.next();
-					System.out.println("Digite o segundo vértice: ");
-					String v2 = scan.next();
-					ArrayList<Vertice> marcado = new ArrayList<Vertice>();
-					
-					if(grafo.existeCaminho(grafo.getVertice(v1), grafo.getVertice(v2), marcado )) {
-						
-						System.out.println("Existe caminho!!!");
-						System.out.println();
-					}else {
-						System.out.println("Não existe caminho!!!");
-						System.out.println();
-					}
-					
-				}else if(menuAlg == 2) {
-					System.out.println("Qual o vértice de origem para calcular os caminhos mínimos?");
-					String dijkstra = scan.next();
-					System.out.println("CAMINHOS MÍNIMOS - (Infinto quando não há caminho):");
-					System.out.println(grafo.dijkstra(grafo.getVertice(dijkstra)));
-					System.out.println();
-				}else if (menuAlg == 3) {
-					grafo = grafo.Kruskal();
-					System.out.println("Árvore Geradora Mínima (KRUSKAL) foi aplicado no seu grafo!!!");
-					
-				}else if (menuAlg == 4) {
-					if(grafo.getOrientacao()) {
-						grafo.grafoReduzido();
-						System.out.println("Grafo Reduzido (Malgrange) foi aplicado no seu grafo!!!");
-						System.out.println();
-					}else {
-						System.out.println("Grafo precisa ser orientado para aplicar essa opção!!");
-						System.out.println();
-					}
-				}
-			
-			
-			
-		
-		}else if (menu2 == 8) {
-
-			File arquivo = new File("Files/arquivoEmDot.txt");
-			try {
-				if (!arquivo.exists()) {
-					arquivo.createNewFile();
-				}
-			} catch (Exception e) {
-
-			}
-
-			String grafoEmDot = grafo.retornaDot();
-
-			FileWriter fw = new FileWriter(arquivo, true);
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(grafoEmDot);
-
-			System.out.println("Arquivo salvo!!");
-			bw.close();
-			fw.close();
-		} else if (menu2 == 9) {
-			try {
-				gera_imagem(grafo);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (menu2 == 10) {
-			System.exit(0);
-		}
-	}
-
-	private static void criar_grafo_valorado(Scanner scan, Grafo grafo, int menu2) throws IOException {
-		if (menu2 == 1) {
-			adiciona_Vertice(scan, grafo);
-		} else if (menu2 == 2) {
-			System.out.println("Qual vértice deseja remover: ");
-			String verticeRemov = scan.next();
-			grafo.removeVertice(verticeRemov);
-			System.out.println("Vértice removido");
-		} else if (menu2 == 3) {
-			if (grafo.getOrientacao()) {
-				adiciona_aresta_valorada_orientada(scan, grafo);
-			} else {
-				adiciona_aresta_valorada_naoOrientada(scan, grafo);
-			}
-		}else if (menu2 == 4) {
-			if(grafo.getOrientacao()) {
-				System.out.println("Digite o vértice de origem da aresta que deseja remover:");
-				String vOrig = scan.next();
-				System.out.println("Digite o vértice de destino da aresta que deseja remover:");
-				String vDest = scan.next();
-				grafo.excluirAresta(grafo.getVertice(vOrig), grafo.getVertice(vDest));
-				System.out.println("Aresta Removida!!");
-			}else {
-				System.out.println("Digite o primeiro vértice da aresta que deseja remover:");
-				String vOrig = scan.next();
-				System.out.println("Digite o segundo vértice da aresta que deseja remover:");
-				String vDest = scan.next();
-				grafo.excluirAresta(grafo.getVertice(vOrig), grafo.getVertice(vDest));
-				System.out.println("Aresta Removida!!");
-
-			}
-			
-		}else if (menu2 ==5) {
-			System.out.println("\n###### Escolha uma opção:");
-			System.out.println("## 1 - Imprimir Matriz Adjacência \n## 2 - Imprimir Matriz Incidência \n## 3 - Imprimir Lista Adjacência");
-			int menu3_imprimir = scan.nextInt();
-			
-				if (menu3_imprimir == 1) {
-					grafo.criaMatrizAdj();
-					imprimeMatrizAdj(grafo.getMat());
-				}else if (menu3_imprimir == 2) {
-					grafo.criaMatrizInc();
-					imprimeMatrizInc(grafo.getMat());
-				}else if(menu3_imprimir == 3) {
-					System.out.println(grafo.retornaListaAdj());
-				}
-			
-		}else if (menu2 == 6) {
-			menu_3();
-			int menu3 = scan.nextInt();
-			while (true) {
-				if (menu3 == 1) {
-					System.out.println("A ordem do grafo é :" + grafo.getOrdemGrafo());
-					System.out.println();
-					break;
-
-				} else if (menu3 == 2) {
-					grau_do_vertice(scan, grafo);
-					System.out.println();
-					break;
-				} else if (menu3 == 3) {
-				
-					if(grafo.grafoSimples()) {
-						System.out.println("O grafo é simples!");
-						System.out.println();
-						break;
-					}else if(!grafo.grafoSimples()){
-						System.out.println("O grafo não é simples!");
-						System.out.println();
-						break;
-					}
-					
-				} else if (menu3 ==4) {
-					if(grafo.verificaRegular()) {
-						System.out.println("O grafo é regular!");
-						System.out.println();
-						break;
-					}else {
-						System.out.println("O grafo NÃO é regular!");
-						System.out.println();
-						break;
-					}
-				}else if (menu3 == 5) {
-					if(grafo.verificaGrafoCompleto()) {
-						System.out.println("O grafo é completo!");
-						System.out.println();
-						break;
-					}else {
-						System.out.println("O grafo NÃO é completo!");
-						System.out.println();
-						break;
-					}
-					
-				}else if (menu3 == 6) {
-					if(grafo.existeConexao()) {
-						System.out.println("Grafo conexo!");
-						System.out.println();
-						break;
-					}else {
-						System.out.println("Grafo desconexo!");
-						System.out.println();
-						break;
-					}
-					
-				}else if (menu3 == 7) {
-					if(grafo.getOrientacao()) {
-						System.out.println("Qual vértice deseja analisar o FTD e FTI :");
-						String vrtc = scan.next();
-						Vertice v = grafo.getVertice(vrtc);
-						System.out.printf("Fecho Transitivo direto:");
-						imprimeLista(grafo.fechoTransitivoDireto(v));
-						System.out.println();
-						System.out.printf("Fecho Transitivo inverso:");
-						imprimeLista(grafo.fechoTransitivoInverso(v));
-						System.out.println();
-						break;	
-					}else {
-						System.out.println("Para FTD e FTI, o grafo deve ser orientado");
-						System.out.println();
-						break;
-					}
-					
-					
-				}else if (menu3 == 8) {
-					System.out.println("Os vértices fonte são: ");
-					imprimeLista(grafo.verticesFonte());
-					System.out.println();
-					break;
-				}else if(menu3 == 9) {
-					System.out.println("Os vértices sumidouro são: ");
-					imprimeLista(grafo.verticesSumidouro());
-					System.out.println();
-					break;
-					
-					
-				}else if (menu3 == 10) {
-					break;
-				}
-			}
-		}else if(menu2 == 7) {
-			System.out.println("\n###### Escolha uma opção:");
-			System.out.println("## 1 - Existe Caminho \n## 2 - Caminho Mínimo (Dijkstra)");
-			int menuAlg = scan.nextInt();
-				if(menuAlg == 1) {
+		} else if (menu2 == 7) {
+			System.out.println(
+					"1 - Existe Caminho \n2 - Caminho Mínimo (Dijkstra) \n3 - Árvore Geradora Mínima(Kruskal) \n4 - Grafo Reduzido (Malgrange)");
+			int menuAlg = leitura.nextInt();
+			if (menuAlg == 1) {
 				System.out.println("Digite o primeiro vértice: ");
-				String v1 = scan.next();
+				String v1 = leitura.next();
 				System.out.println("Digite o segundo vértice: ");
-				String v2 = scan.next();
+				String v2 = leitura.next();
 				ArrayList<Vertice> marcado = new ArrayList<Vertice>();
-				
-				if(grafo.existeCaminho(grafo.getVertice(v1), grafo.getVertice(v2), marcado )) {
-					
-					System.out.println("Existe caminho!!");
+
+				if (grafo.existeCaminho(grafo.getVertice(v1), grafo.getVertice(v2), marcado)) {
+
+					System.out.println("Existe caminho!!!");
 					System.out.println();
-				}else {
-					System.out.println("Não existe caminho!!");
+				} else {
+					System.out.println("Não existe caminho!!!");
 					System.out.println();
 				}
-				}else if(menuAlg == 2) {
-					System.out.println("Qual o vértice de origem para calcular os caminhos mínimos?");
-					String dijkstra = scan.next();
-					System.out.println("CAMINHOS MÍNIMOS - (Infinto quando não há caminho):");
-					System.out.println(grafo.dijkstra(grafo.getVertice(dijkstra)));
-					System.out.println();
-				}else if (menuAlg == 3) {
-					grafo = grafo.Kruskal();
-					System.out.println("Árvore Geradora Mínima (KRUSKAL) foi aplicado no seu grafo!!!");
-					System.out.println();
-				}else if (menuAlg == 4) {
-					if(grafo.getOrientacao()) {
-						grafo.grafoReduzido();
-						System.out.println("Grafo Reduzido (Malgrange) foi aplicado no seu grafo!!!");
-						System.out.println();
-					}else {
-						System.out.println("Grafo precisa ser orientado para aplicar essa opção!!!");
-						System.out.println();
-					}
-					
-				}
-				
-		}
-		
-		else if (menu2 == 8) {
-			
+
+			} else if (menuAlg == 2) {
+				System.out.println("Qual o vértice de origem para calcular os caminhos mínimos?");
+				String dijkstra = leitura.next();
+				System.out.println("Caminhos Mínimos:");
+				System.out.println(grafo.dijkstra(grafo.getVertice(dijkstra)));
+				System.out.println();
+			}
+
+		} else if (menu2 == 8) {
+
 			System.out.println("###### Escolha uma opção:");
 			System.out.println("## 1 - Salvar grafo em disco");
 			System.out.println("## 2 - Salvar imagem do grafo");
-			
-			int menuExportar = scan.nextInt();
-			if(menuExportar == 1) {
+
+			int menuExportar = leitura.nextInt();
+			if (menuExportar == 1) {
 				File arquivo = new File("Files/arquivoEmDot.txt");
 				try {
 					if (!arquivo.exists()) {
@@ -609,12 +371,11 @@ public class Main {
 				FileWriter fw = new FileWriter(arquivo, true);
 				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(grafoEmDot);
-				
+
 				System.out.println("Arquivo salvo!!");
 				bw.close();
 				fw.close();
-				
-			}else if (menuExportar == 2) {
+			} else if (menuExportar == 2) {
 				try {
 					gera_imagem(grafo);
 
@@ -624,48 +385,250 @@ public class Main {
 			}
 		}
 	}
-	private static void adiciona_aresta_naoValorada_orientada(Scanner scan, Grafo grafo) {
+
+	private static void criar_grafo_valorado(Scanner leitura, Grafo grafo, int menu2) throws IOException {
+		if (menu2 == 1) {
+			adiciona_Vertice(leitura, grafo);
+		} else if (menu2 == 2) {
+			System.out.println("Qual vértice deseja remover: ");
+			String verticeRemov = leitura.next();
+			grafo.removeVertice(verticeRemov);
+			System.out.println("Vértice removido");
+		} else if (menu2 == 3) {
+			if (grafo.getOrientacao()) {
+				adiciona_aresta_valorada_orientada(leitura, grafo);
+			} else {
+				adiciona_aresta_valorada_naoOrientada(leitura, grafo);
+			}
+		} else if (menu2 == 4) {
+			if (grafo.getOrientacao()) {
+				System.out.println("Digite o vértice de origem da aresta que deseja remover:");
+				String vOrig = leitura.next();
+				System.out.println("Digite o vértice de destino da aresta que deseja remover:");
+				String vDest = leitura.next();
+				grafo.excluirAresta(grafo.getVertice(vOrig), grafo.getVertice(vDest));
+				System.out.println("Aresta Removida!!");
+			} else {
+				System.out.println("Digite o primeiro vértice da aresta que deseja remover:");
+				String vOrig = leitura.next();
+				System.out.println("Digite o segundo vértice da aresta que deseja remover:");
+				String vDest = leitura.next();
+				grafo.excluirAresta(grafo.getVertice(vOrig), grafo.getVertice(vDest));
+				System.out.println("Aresta Removida!!");
+
+			}
+
+		} else if (menu2 == 5) {
+			System.out.println("\n###### Escolha uma opção:");
+			System.out.println(
+					"## 1 - Imprimir matriz de adjacência \n## 2 - Imprimir matriz de incidência \n## 3 - Imprimir lista de adjacência");
+			int menu3_imprimir = leitura.nextInt();
+
+			if (menu3_imprimir == 1) {
+				grafo.criaMatrizAdj();
+				imprimeMatrizAdj(grafo.getMat());
+			} else if (menu3_imprimir == 2) {
+				grafo.criaMatrizInc();
+				imprimeMatrizInc(grafo.getMat());
+			} else if (menu3_imprimir == 3) {
+				System.out.println(grafo.retornaListaAdj());
+			}
+
+		} else if (menu2 == 6) {
+			menu_3();
+			int menu3 = leitura.nextInt();
+			while (true) {
+				if (menu3 == 1) {
+					System.out.println("A ordem do grafo é :" + grafo.getOrdemGrafo());
+					System.out.println();
+					break;
+
+				} else if (menu3 == 2) {
+					grau_do_vertice(leitura, grafo);
+					System.out.println();
+					break;
+				} else if (menu3 == 3) {
+
+					if (grafo.grafoSimples()) {
+						System.out.println("O grafo é simples!");
+						System.out.println();
+						break;
+					} else if (!grafo.grafoSimples()) {
+						System.out.println("O grafo não é simples!");
+						System.out.println();
+						break;
+					}
+
+				} else if (menu3 == 4) {
+					if (grafo.verificaRegular()) {
+						System.out.println("O grafo é regular!");
+						System.out.println();
+						break;
+					} else {
+						System.out.println("O grafo NÃO é regular!");
+						System.out.println();
+						break;
+					}
+				} else if (menu3 == 5) {
+					if (grafo.verificaGrafoCompleto()) {
+						System.out.println("O grafo é completo!");
+						System.out.println();
+						break;
+					} else {
+						System.out.println("O grafo NÃO é completo!");
+						System.out.println();
+						break;
+					}
+
+				} else if (menu3 == 6) {
+					if (grafo.existeConexao()) {
+						System.out.println("Grafo conexo!");
+						System.out.println();
+						break;
+					} else {
+						System.out.println("Grafo desconexo!");
+						System.out.println();
+						break;
+					}
+
+				} else if (menu3 == 7) {
+					if (grafo.getOrientacao()) {
+						System.out.println("Qual vértice deseja analisar o FTD e FTI :");
+						String vrtc = leitura.next();
+						Vertice v = grafo.getVertice(vrtc);
+						System.out.printf("Fecho Transitivo direto:");
+						imprimeLista(grafo.fechoTransitivoDireto(v));
+						System.out.println();
+						System.out.printf("Fecho Transitivo inverso:");
+						imprimeLista(grafo.fechoTransitivoInverso(v));
+						System.out.println();
+						break;
+					} else {
+						System.out.println("Para FTD e FTI, o grafo deve ser orientado");
+						System.out.println();
+						break;
+					}
+
+				} else if (menu3 == 8) {
+					System.out.println("Os vértices fonte são: ");
+					imprimeLista(grafo.verticesFonte());
+					System.out.println();
+					break;
+				} else if (menu3 == 9) {
+					System.out.println("Os vértices sumidouro são: ");
+					imprimeLista(grafo.verticesSumidouro());
+					System.out.println();
+					break;
+
+				} else if (menu3 == 10) {
+					break;
+				}
+			}
+		} else if (menu2 == 7) {
+			System.out.println("\n###### Escolha uma opção:");
+			System.out.println("## 1 - Existe Caminho \n## 2 - Caminho Mínimo (Dijkstra)");
+			int menuAlg = leitura.nextInt();
+			if (menuAlg == 1) {
+				System.out.println("Digite o primeiro vértice: ");
+				String v1 = leitura.next();
+				System.out.println("Digite o segundo vértice: ");
+				String v2 = leitura.next();
+				ArrayList<Vertice> marcado = new ArrayList<Vertice>();
+
+				if (grafo.existeCaminho(grafo.getVertice(v1), grafo.getVertice(v2), marcado)) {
+
+					System.out.println("Existe caminho!!");
+					System.out.println();
+				} else {
+					System.out.println("Não existe caminho!!");
+					System.out.println();
+				}
+			} else if (menuAlg == 2) {
+				System.out.println("Qual o vértice de origem para calcular os caminhos mínimos?");
+				String dijkstra = leitura.next();
+				System.out.println("Caminhos Mínimos:");
+				System.out.println(grafo.dijkstra(grafo.getVertice(dijkstra)));
+				System.out.println();
+			}
+		}
+
+		else if (menu2 == 8) {
+
+			System.out.println("###### Escolha uma opção:");
+			System.out.println("## 1 - Salvar grafo em disco");
+			System.out.println("## 2 - Salvar imagem do grafo");
+
+			int menuExportar = leitura.nextInt();
+			if (menuExportar == 1) {
+				File arquivo = new File("Files/arquivoEmDot.txt");
+				try {
+					if (!arquivo.exists()) {
+						arquivo.createNewFile();
+					}
+				} catch (Exception e) {
+
+				}
+
+				String grafoEmDot = grafo.retornaDot();
+
+				FileWriter fw = new FileWriter(arquivo, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				bw.write(grafoEmDot);
+
+				System.out.println("Arquivo salvo!!");
+				bw.close();
+				fw.close();
+			} else if (menuExportar == 2) {
+				try {
+					gera_imagem(grafo);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private static void adiciona_aresta_naoValorada_orientada(Scanner leitura, Grafo grafo) {
 		System.out.println("Digite o nome do vértice de origem da aresta: ");
-		String nomeVerticeOrigem = scan.next();
+		String nomeVerticeOrigem = leitura.next();
 		System.out.println("Digite o nome do vértice destino da aresta: ");
-		String nomeVerticeDestino = scan.next();
+		String nomeVerticeDestino = leitura.next();
 		grafo.incluirAresta(1, nomeVerticeOrigem, nomeVerticeDestino);
 		System.out.println("Aresta adicionada!");
 	}
 
-	private static void adiciona_aresta_naoValorada_naoOrientada(Scanner scan, Grafo grafo) {
+	private static void adiciona_aresta_naoValorada_naoOrientada(Scanner leitura, Grafo grafo) {
 		System.out.println("Digite o nome do primeiro vértice da aresta: ");
-		String nomeVerticeOrigem = scan.next();
+		String nomeVerticeOrigem = leitura.next();
 		System.out.println("Digite o nome do segundo vértice da aresta: ");
-		String nomeVerticeDestino = scan.next();
+		String nomeVerticeDestino = leitura.next();
 		grafo.incluirAresta(1, nomeVerticeOrigem, nomeVerticeDestino);
 		System.out.println("Aresta adicionada!");
 	}
-	
-	
-	private static void adiciona_aresta_valorada_naoOrientada(Scanner scan, Grafo grafo) {
+
+	private static void adiciona_aresta_valorada_naoOrientada(Scanner leitura, Grafo grafo) {
 		System.out.println("Digite o peso da aresta que deseja adicionar: ");
-		int peso = scan.nextInt();
+		int peso = leitura.nextInt();
 		System.out.println("Digite o nome do primeiro vértice da aresta: ");
-		String nomeVerticeOrigem = scan.next();
+		String nomeVerticeOrigem = leitura.next();
 		System.out.println("Digite o nome do segundo vértice da aresta: ");
-		String nomeVerticeDestino = scan.next();
+		String nomeVerticeDestino = leitura.next();
 		grafo.incluirAresta(peso, nomeVerticeOrigem, nomeVerticeDestino);
 		System.out.println("Aresta adicionada!");
 	}
 
-	
 	private static void gera_imagem(Grafo grafo) throws IOException {
 		String grafoEmDot = grafo.retornaDot();
 		Graph.createStringDotToPng(grafoEmDot, "Imagens/Grafo.png");
 		System.out.println("Imagem do grafo gerada e salva em disco! ");
 	}
 
-	private static void grau_do_vertice(Scanner scan, Grafo grafo) {
+	private static void grau_do_vertice(Scanner leitura, Grafo grafo) {
 		System.out.println("Qual o nome do vértice que deseja saber o grau?");
-		String dadoVertice = scan.next();
-		System.out.println("Esse vértice possui grau: " + (grafo.getGrau(grafo.getVertice(dadoVertice))));
-		
+		String NomeVertice = leitura.next();
+		System.out.println("Esse vértice possui grau: " + (grafo.getGrau(grafo.getVertice(NomeVertice))));
+
 	}
 
 	private static void menu_3() {
@@ -682,20 +645,20 @@ public class Main {
 		System.out.println("## 10 - Sair");
 	}
 
-	private static void adiciona_aresta_valorada_orientada(Scanner scan, Grafo grafo) {
+	private static void adiciona_aresta_valorada_orientada(Scanner leitura, Grafo grafo) {
 		System.out.println("Digite o peso da aresta que deseja adicionar: ");
-		int peso = scan.nextInt();
+		int peso = leitura.nextInt();
 		System.out.println("Digite o nome do vértice origem da aresta: ");
-		String nomeVerticeOrigem = scan.next();
+		String nomeVerticeOrigem = leitura.next();
 		System.out.println("Digite o nome do vértice destino da aresta: ");
-		String nomeVerticeDestino = scan.next();
+		String nomeVerticeDestino = leitura.next();
 		grafo.incluirAresta(peso, nomeVerticeOrigem, nomeVerticeDestino);
 		System.out.println("Aresta adicionada!");
 	}
 
-	private static void adiciona_Vertice(Scanner scan, Grafo grafo) {
+	private static void adiciona_Vertice(Scanner leitura, Grafo grafo) {
 		System.out.println("Digite o nome do vértice que deseja adicionar: ");
-		String nome = scan.next();
+		String nome = leitura.next();
 		grafo.addVertice(nome);
 		System.out.println("\nVértice adicionado!\n");
 	}
@@ -707,7 +670,7 @@ public class Main {
 		System.out.println("## 3 - Sair\n");
 	}
 
-	private static void menu_2(Scanner scan) {
+	private static void menu_2(Scanner leitura) {
 		System.out.println("\n###### Escolha uma opção:");
 		System.out.println("## 1 - Incluir vértice");
 		System.out.println("## 2 - Remover vértice");
@@ -718,9 +681,7 @@ public class Main {
 		System.out.println("## 7 - Caminhos");
 		System.out.println("## 8 - Exportar");
 		System.out.println("## 9 - Sair");
-
 	}
-	
 
 	public static void imprimeMatrizAdj(int[][] matriz) {
 		for (int l = 0; l < matriz[0].length; l++) {
@@ -739,13 +700,11 @@ public class Main {
 			System.out.println(" ");
 		}
 	}
-	
-	
+
 	public static void imprimeLista(ArrayList<Vertice> lista) {
 		for (Vertice v : lista) {
-			System.out.printf(v.getDado() + " ");
+			System.out.printf(v.getNome() + " ");
+		}
 	}
-}
-
 
 }

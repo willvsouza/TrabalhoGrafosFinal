@@ -1,3 +1,7 @@
 graph G {
 a -- b [label="4"]; 
+}graph G {
+a -- b [label="1"]; 
+b -- c [label="1"]; 
+b -- d [label="1"]; 
 }

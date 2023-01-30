@@ -1,0 +1,5 @@
+graph AB{
+a -- b [label="1.0"];
+b -- c [label="1.0"];
+b -- d [label="1.0"];
+}

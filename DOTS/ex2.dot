@@ -1,0 +1,5 @@
+digraph AB{
+a -> b [label="2.0"];
+b -> c [label="3.0"];
+b -> d [label="5.0"];  
+}

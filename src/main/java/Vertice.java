@@ -1,30 +1,18 @@
 import java.util.ArrayList;
 
 public class Vertice {
-	private String dado;
+	private String nome;
 	private ArrayList<Aresta> arestasEntrada;
 	private ArrayList<Aresta> arestasSaida;
-	
-	public Vertice(String dado) {
-		this.dado = dado;
+
+	public Vertice(String nome) {
+		this.nome = nome;
 		this.arestasEntrada = new ArrayList<Aresta>();
 		this.arestasSaida = new ArrayList<Aresta>();
 	}
-	
-	public String getDado() {
-		return dado;
-	}
 
-	public void setDado(String dado) {
-		this.dado = dado;
-	}
-
-	public void addArestaEntrada(Aresta aresta) {
-		this.arestasEntrada.add(aresta);
-	}
-	
-	public void addArestaSaida(Aresta aresta) {
-		this.arestasSaida.add(aresta);
+	public String getNome() {
+		return nome;
 	}
 
 	public ArrayList<Aresta> getArestasEntrada() {
@@ -35,26 +23,37 @@ public class Vertice {
 		return arestasSaida;
 	}
 
-	public boolean equals(Object obj){
-		return dado.equals(((Vertice) obj).getDado());
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
-	
-	public int qtdadeLig (Vertice vrtc) {
+
+	public void addArestaEntrada(Aresta aresta) {
+		this.arestasEntrada.add(aresta);
+	}
+
+	public void addArestaSaida(Aresta aresta) {
+		this.arestasSaida.add(aresta);
+	}
+
+	public boolean equals(Object obj) {
+		return nome.equals(((Vertice) obj).getNome());
+	}
+
+	public int quantLigacoes(Vertice vert) {
 		int cont = 0;
-		
-		for (Aresta a : vrtc.arestasEntrada) {
-			if (getDado().equals(a.getFim().getDado())||getDado().equals(a.getInicio().getDado())) {
+
+		for (Aresta a : vert.arestasEntrada) {
+			if (getNome().equals(a.getFim().getNome()) || getNome().equals(a.getInicio().getNome())) {
 				cont++;
 			}
 		}
-		
-		for(Aresta a : vrtc.arestasSaida) {
-			if (getDado().equals(a.getFim().getDado())||getDado().equals(a.getInicio().getDado())) {
+
+		for (Aresta a : vert.arestasSaida) {
+			if (getNome().equals(a.getFim().getNome()) || getNome().equals(a.getInicio().getNome())) {
 				cont++;
 			}
 		}
 		return cont;
 	}
-	
 
 }
