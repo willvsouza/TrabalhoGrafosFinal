@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>grafos.br</groupId>
+  <artifactId>Projeto_Principal_Grafos</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+
+	<dependencies>
+
+		<dependency>
+
+			<groupId>br.com.davesmartins</groupId>
+
+			<artifactId>api</artifactId>
+
+			<version>1.0.0-SNAPSHOT</version>
+
+		</dependency>
+
+	</dependencies>
+
+
+
+	<repositories>
+
+		<repository>
+
+			<id>gitlab-maven</id>
+			<url>https://gitlab.com/api/v4/groups/7921849/-/packages/maven</url>
+
+		</repository>
+
+	</repositories>
+
+	<properties>
+     <maven.compiler.source>1.8</maven.compiler.source>
+     <maven.compiler.target>1.8</maven.compiler.target>
+</properties>
+
+
+
+</project>
